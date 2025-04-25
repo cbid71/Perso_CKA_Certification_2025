@@ -19,12 +19,22 @@ https://training.linuxfoundation.org/certification/certified-kubernetes-administ
 
 https://github.com/kodekloudhub/certified-kubernetes-administrator-course
 
+See if tutoraial 
+
 
 K3S : https://k3s.io/
 
 
 https://uklabs.kodecloud.com/courses/labs-certified-kubernetes-administrator-with-practice-tests/
 
+# To be done
+
+- get killerSH tests
+- get tutorialdojo tests
+- get the exam tips
+- read the candidate handbook
+- read all my notes in this repo
+- linux foundation trainings ?
 
 # know about
 
