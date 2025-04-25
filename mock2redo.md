@@ -1,5 +1,16 @@
 1: 
-Très basique
+```
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-sc
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+provisioner: kubernetes.io/no-provisioner
+allowVolumeExpansion: true
+volumeBindingMode: WaitForFirstConsumer
+```
+
 
 
 2 :
@@ -123,7 +134,7 @@ metadata:
 rules:
 - apiGroups: [""] # "" indicates the core API group
   resources: ["pods"]
-  verbs: ["create", "list", "update", "delete"]
+  verbs: ["create", "list", "get", "update", "delete"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -144,7 +155,7 @@ roleRef:
 apiVersion: certificates.k8s.io/v1
 kind: CertificateSigningRequest
 metadata:
-  name: john
+  name: john-developer
   namespace: developer
 spec:
   signerName: example.com/mysigner
@@ -156,6 +167,7 @@ spec:
 Et en théorie derriere il aurait fallu faire ça : 
 
 ```
+kubectl get csr
 kubectl certificate approve <certificate-signing-request-name>
 kubectl certificate approve john
 ```
@@ -163,7 +175,7 @@ kubectl certificate approve john
 Et pour vérifier 
 
 ```
-kubectl auth can-i update pods --as=john --namespace=development
+kubectl get pods -n development --as='john'
 ```
 
 6 : 
@@ -208,6 +220,8 @@ spec:
     - -c
     - "sleep 200000"
 ```
+
+kubectl exec busybox -- sh -c "nslookup nginx-resolver"
 
 
 7:
@@ -256,11 +270,23 @@ spec:
         averageUtilization: 65
 ```
 
+Puis penser à installer metrics server
+Puis penser à régler le metrics server en non sécurisé
+
+```
+    - --kubelet-insecure-tls
+    - --kubelet-preferred-address-types=InternalIP
+```
+
 
 9:
 
 penser à se ssh sur le bon controlplane avant
 Il a juste fallu redémarrer le service kubelet sur le controlplane
+
+Et tant qu'à faire, l'api server était pété donc je l'ai réparé :
+
+`kubectl describe pod kube-apiserver-cluster2-controlplane -n kube-system`
 
 10:
 
@@ -289,11 +315,20 @@ spec:
 
 11:
 
-Hey ! c'est bon là ! de l'extraction via jq
-
+Hey ! c'est bon là ! de l'extraction via jq, et la solution ne fonctionne pas :
+```
 kubectl get deploy -n <NAMESPACE> <DEPLOYMENT-NAME> -o json | jq -r '.spec.template.spec.containers[].image'
-
 helm uninstall <RELEASE-NAME> -n <NAMESPACE>
+```
+
+EN QUI MARCHE mais difficile à sortir en exam : 
+
+```
+kubectl get deployments --all-namespaces -o json | jq -r '.items[] | "\(.metadata.namespace):\(.metadata.name) -> \(.spec.template.spec.containers[]?.image)"' | grep -i "kodekloud/webapp-color:v1"
+helm list -n atlanta-page-04
+helm uninstall atlanta-page-apd -n atlanta-page-04
+```
+
 
 12 :
 
@@ -309,16 +344,50 @@ kubectl describe replicasets backend-api-7977bfdbd5
 
 Et aligner le déploiement sur les éléments du replicaset
 
+---> Il faut que la somme des requests soit strictement inférieur à la limite imposée par le replicaset
+
+```
+      resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+```
+
 
 14 :
 
-Il faut déployer Calico
+Il faut récupérer Calico/Tigera
 
-https://raw.githubusercontent.com/projectcalico/calico/v3.29.3/manifests/tigera-operator.yaml
+curl https://raw.githubusercontent.com/projectcalico/calico/v3.29.3/manifests/tigera-operator.yaml -O
 
 Et déployer le custom resource
 
 curl https://raw.githubusercontent.com/projectcalico/calico/v3.29.2/manifests/custom-resources.yaml -O
+
+Puis installer Tigera
+
+kubectl create -f tigera-operator.yaml    # Attention ! pas apply sinon ça plante
+
+Puis installer les custom resources
+
+kubectl create -f custom-resources.yaml
+
+Apparemment il manque une histoire de CIDR, la correction a planté sur ce point mais en fouillant un peu je tombe sur ce résultat qui pourrait fonctionner :
+
+```
+apiVersion: crd.projectcalico.org/v1
+kind: IPPool
+metadata:
+  name: custom-pool-172-17
+spec:
+  cidr: 172.17.0.0/16
+  ipipMode: Always
+  natOutgoing: true
+  disabled: false
+``` 
+
+Problème, je ne peux pas installer la CRD sur le yaml tigera-operator.yaml 
+The CustomResourceDefinition "installations.operator.tigera.io" is invalid: metadata.annotations: Too long: may not be more than 262144 bytes
 
 
 Et... je sais pas.
