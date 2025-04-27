@@ -123,11 +123,13 @@ spec:
 
 https://uklabs.kodekloud.com/topic/practice-test-taints-and-tolerations-2/
 
+```
 kubectl taint node node01 spray=mortein:NoSchedule
 
 kubectl run mosquito --image=nginx
 
 kubectl run mosquito --image=nginx --dry-run=client -o yaml
+```
 
 Then with modify to add tolerations
 
@@ -600,6 +602,8 @@ https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/
 **Admission controller :** a security check that makes sure a request to create or change something in Kubernetes follows certain rules before it's allowed to happen.
 It's supported by the `kube-apiserver`
 
+**They are Kubernetes components that intercept requests to the Kubernetes API server after authentication/authorization but before persistence (saving to etcd).**
+
 To see which admission plugins are enabled: `kube-apiserver -h | grep enable-admission-plugins`
 
 Documentation : https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/
@@ -607,6 +611,7 @@ Documentation : https://kubernetes.io/docs/reference/access-authn-authz/admissio
 ![Admission controller](./pictures/admissioncontrol.png)
 
 We could imagine to have an admissioncontroler able to auto create a namespace or a storage class
+
 
 ## Practices
 
@@ -621,7 +626,6 @@ List enabled admissioncontrollers
 - Connect on the controlplane
 - Open `cat /etc/kubernetes/manifests/kube-apiserver.yaml | more`
 - locate the line `--enable-admission-plugins`, it will list the enabled admission controllers
-
 
 
 ```
