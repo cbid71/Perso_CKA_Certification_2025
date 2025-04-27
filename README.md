@@ -42,6 +42,7 @@ https://www.udemy.com/course/certified-kubernetes-administrator/
 - read the candidate handbook
 - get other mocks exams by udemy
 - get killerSH tests
+- redo all mock exams by mumshad
 - read the candidate handbook
 - read all my notes in this repo
 - linux foundation trainings ?
