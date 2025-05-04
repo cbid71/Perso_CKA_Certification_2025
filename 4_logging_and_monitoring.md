@@ -59,3 +59,15 @@ know memory/cpu consumed by pod with namespace value too
 kubectl top pods -A
 ```
 
+TO BYPASS the TSL verification on metrics-server
+
+```
+#  kubectl edit deployments.apps metrics-server
+
+    - /metrics-server
+    - --kubelet-insecure-tls
+    - --kubelet-preferred-address-types=InternalIP
+```
+
+At least kubelet-insecure-tls is mandatory, maybe you need kubelet-preferred-address-types
+Source : https://github.com/kubernetes-sigs/metrics-server/blob/master/README.md#configuration
