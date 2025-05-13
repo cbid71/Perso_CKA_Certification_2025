@@ -25,7 +25,7 @@ Whereas the commands are different in version 3
 
 To set the right version of API set the environment variable ETCDCTL_API command
 
-export ETCDCTL_API=3
+    export ETCDCTL_API=3
 
 
 When API version is not set, it is assumed to be set to version 2. And version 3 commands listed above don't work. When API version is set to version 3, version 2 commands listed above don't work.

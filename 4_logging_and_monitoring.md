@@ -69,5 +69,6 @@ TO BYPASS the TSL verification on metrics-server
     - --kubelet-preferred-address-types=InternalIP
 ```
 
-At least kubelet-insecure-tls is mandatory, maybe you need kubelet-preferred-address-types
+At least kubelet-insecure-tls is mandatory, maybe you need kubelet-preferred-address-types.
+
 Source : https://github.com/kubernetes-sigs/metrics-server/blob/master/README.md#configuration

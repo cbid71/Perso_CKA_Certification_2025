@@ -171,7 +171,7 @@ documentation page : https://kubernetes.io/docs/concepts/scheduling-eviction/ass
 
 Add a label to a node:
 
-kubectl label nodes nodename labelkey=labelvalue
+`kubectl label nodes nodename labelkey=labelvalue`
 
 ## Node affinity
 
@@ -208,7 +208,7 @@ A simplier comparison of
 
 https://uklabs.kodekloud.com/topic/practice-test-node-affinity-3/
 
-kubectl label nodes node01 color=blue
+`kubectl label nodes node01 color=blue`
 
 No taint -> a deployment without tolerations can be scheduled on aaaaall nodes
 
@@ -281,7 +281,7 @@ spec:
 TODO : To be retried
 
 
-kubectl create deployment example --image=nginx --replicas=2  --dry-run=client -o yaml
+`kubectl create deployment example --image=nginx --replicas=2  --dry-run=client -o yaml`
 
 ## Taint and Toleration vs Node affinity
 
@@ -338,11 +338,11 @@ Daemonsets documentation : https://kubernetes.io/docs/concepts/workloads/control
 
 ## Practice
 
-kubectl get daemonsets -A
+`kubectl get daemonsets -A`
 
 https://uklabs.kodekloud.com/topic/practice-test-daemonsets-2/
 
-kubectl describe daemonset kube-flannel-ds -n kube-flannel | grep -i image
+`kubectl describe daemonset kube-flannel-ds -n kube-flannel | grep -i image`
 
 
 extracted from the documentation : 
@@ -390,7 +390,7 @@ https://uklabs.kodekloud.com/topic/practice-test-static-pods-2/
 
 list static pods : 
 
-kubectl get pods --all-namespaces -o json | jq -r '.items | map(select(.metadata.ownerReferences[]?.kind == "Node" ) | .metadata.name) | .[]'
+`kubectl get pods --all-namespaces -o json | jq -r '.items | map(select(.metadata.ownerReferences[]?.kind == "Node" ) | .metadata.name) | .[]'`
 
 ANOTHER EASIER WAY TO DO IT : 
 
@@ -505,7 +505,9 @@ https://uklabs.kodekloud.com/topic/practice-test-multiple-schedulers-2/
 
 Know the scheduler that scheduled a specific pod ?
 
-???
+```
+kubectl get pod my-pod -n default -o jsonpath='{.spec.schedulerName}'
+```
 
 In the solution he only looks for a pod named ****-scheduler, but a filter on "sheduler" in description of pods help to look it for real.
 
@@ -675,7 +677,7 @@ Meh, maybe find another source.
 
 It's about Admission webhooks
 
-admission webhooks: a way to extend the functionality of the Kubernetes API 
+**admission webhooks:** a way to extend the functionality of the Kubernetes API 
 Admission webhooks are used to run custom logic to approve, reject, or modify Kubernetes API requests before the resource is saved to the cluster.
 
 Example :

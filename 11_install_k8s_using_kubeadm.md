@@ -32,7 +32,7 @@ https://uklabs.kodekloud.com/topic/practice-test-cluster-installation-using-kube
 
 https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#installing-kubeadm-kubelet-and-kubectl
 
-Define repositories
+Define repositories on all controlplanes and worker nodes
 
 ```
 on each node
@@ -44,21 +44,21 @@ sudo apt-get update
 then install controlplanes / masters
 
 ```
-kubeadm installed on controlplane
-kubelet installed on controlplane
-
 sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl		# Optional - forbid later update - lock the version
+
+# kubeadm installed on controlplane
+# kubelet installed on controlplane
 ```
 
 then install workers
 
 ```
-Kubeadm installed on worker node01
-Kubelet installed on worker node01
-
 sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl		# Optional - forbid later update - lock the version
+
+# kubeadm installed on worker node01
+# kubelet installed on worker node01
 ```
 
 then go back on the control-plane
@@ -70,12 +70,12 @@ kubeadm init --apiserver-cert-extra-sans=controlplane --apiserver-advertise-addr
 You get the info to bind workers to the control plane DO NOT PLAY IT ON MASTER NODE, it's useless, it's made for worker
 
 ```
-Then you can join any number of worker nodes by running the following on each as root:
+# Then you can join any number of worker nodes by running the following on each as root:
 
 kubeadm join 192.168.183.235:6443 --token 67h6sh.a7n9czafhl17hzoy \
         --discovery-token-ca-cert-hash sha256:90868311bc21437d07efd9ae3c6f5ca4a6a7c3c35b5651137dc646609056f150 
 
-OR you can regenerate it by playing
+# OR you can regenerate it by playing
 
 root@controlplane:~> kubeadm token create --print-join-command
 kubeadm join 192.168.114.75:6443 --token aqe7sk.zyr2zpqxa0aomjje --discovery-token-ca-cert-hash sha256:b9fa5652e076b79889b7ceb2f41638be5d6975c2c2970b27ed6c9e601315cd41

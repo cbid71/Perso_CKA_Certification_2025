@@ -48,7 +48,7 @@ kubectl cordon node01 # make the node unschedulable without destroying what is h
 
 ## Kubernetes releases and version
 
-kubectl get nodes # know the versions
+`kubectl get nodes # know the versions`
 
 ![Package versions](./pictures/packages.png)
 

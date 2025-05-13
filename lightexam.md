@@ -79,7 +79,7 @@ spec:
 Monter un secret sur un pod
 	https://kubernetes.io/fr/docs/concepts/configuration/secret/
 
-En fait le pod référençait un mauvais non de pvc
+En fait le pod référençait un mauvais nom de pvc
 
 
 Ensuite etcd

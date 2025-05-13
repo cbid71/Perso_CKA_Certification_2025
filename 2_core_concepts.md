@@ -183,7 +183,7 @@ To allow communication between pods, an internal network is deployed between all
 
 ```
 # See through kubectl 
-kubectl get pdos -A | grep -i kube-proxy
+kubectl get pods -A | grep -i kube-proxy
 ```
 
 
